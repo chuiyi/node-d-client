@@ -1,6 +1,10 @@
-const { app, BrowserWindow } = require('electron')
+const electron = require('electron');
+const app = electron.app;
+const BrowserWindow = electron.BrowserWindow;
 const path = require('path')
 const url = require('url')
+// const model_dmm = require('./model/model_dmm');
+// model_dmm.test();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -8,7 +12,12 @@ let win
 
 function createWindow() {
     // Create the browser window.
-    win = new BrowserWindow({ width: 800, height: 600 })
+    win = new BrowserWindow({ 
+        width: 1024, 
+        height: 768,
+        autoHideMenuBar: true,
+        titleBarStyle: "hiddenInset"
+     })
 
     // and load the index.html of the app.
     win.loadURL(url.format({
@@ -18,7 +27,7 @@ function createWindow() {
     }))
 
     // Open the DevTools.
-    // win.webContents.openDevTools()
+    win.webContents.openDevTools()
 
     // Emitted when the window is closed.
     win.on('closed', () => {
