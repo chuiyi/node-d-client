@@ -56,19 +56,19 @@
                         <h5 class="nav-group-title">Favorites</h5>
                         <a class="nav-group-item active">
                             <span class="icon icon-home"></span>
-                            Home
+                            DMM熱門新片
                         </a>
                         <span class="nav-group-item">
                             <span class="icon icon-download"></span>
-                            Downloads
+                            已下載影片
                         </span>
                         <span class="nav-group-item">
                             <span class="icon icon-folder"></span>
-                            Documents
+                            影片資料庫
                         </span>
                         <span class="nav-group-item">
                             <span class="icon icon-signal"></span>
-                            AirPlay
+                            撥放歷史
                         </span>
                         <span class="nav-group-item">
                             <span class="icon icon-print"></span>
@@ -88,8 +88,14 @@
         </div>
     </div>
     <script src="photon/template-app/app.js" charset="utf-8"></script>
-    <script src="node_modules/jquery-lite/dist/jquery.min.js" charset="utf-8"></script>
     <script src="assets/js/index.js" charset="utf-8"></script>
+    <script>
+        window.$ = window.jQuery = require("./assets/js/jquery-3.3.1.min.js");
+        $('.nav-group-item').click(function (e) {
+            $('.nav-group-item').removeClass('active')
+            this.addClass('active')
+        })
+    </script>
 </body>
 
 </html>

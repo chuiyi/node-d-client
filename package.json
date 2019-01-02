@@ -3,10 +3,9 @@
   "version": "0.0.1",
   "main": "main.js",
   "dependencies": {
+    "app": "^0.1.0",
     "bootstrap": "^4.0.0",
     "electron": "^1.8.2",
-    "jquery": "^3.3.1",
-    "jquery-lite": "^2.2.3",
     "request": "^2.83.0"
   }
 }

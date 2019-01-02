@@ -3,8 +3,11 @@ var http = require('http')
 var path = require('path')
 var request = require('request')
 // var strAV = '\\\\DISKSTATION\\Temp\\Incoming\\AV'
-var strAV = '\\\\DISKSTATION\\Temp\\AV\\騎兵'
+// var strAV = '\\\\DISKSTATION\\Temp\\Incoming\\AV(沒看過)'
+var strAV = '\\\\DISKSTATION\\Temp\\AV\\Temp'
+// var strAV = '\\\\DISKSTATION\\Temp\\AV\\騎兵'
 var strAVTooLong = '\\\\DISKSTATION\\Temp\\Incoming\\AV\\太長了'
+var strAVRepeat = '\\\\DISKSTATION\\Temp\\Incoming\\AV\\重複檔案'
 var strPath = '\\\\DISKSTATION\\Temp\\Incoming\\test'
 var EXTENSION = ['.mp4', '.avi', '.mkv', '.wmv']
 
@@ -87,9 +90,17 @@ exports.test = function () {
                                         fs.mkdirSync(strPathPrefix)
                                     }
                                 }
+                                // else {
+                                // }
                                 try {
-                                    fs.renameSync(filePath, strPathPrefix + '\\' + replaceInvalidWord(jsonfile.filename) + path.extname(filePath))
-                                    console.log('成功: ' + jsonfile.filename)
+                                    if (!fs.existsSync(strPathPrefix + '\\' + replaceInvalidWord(jsonfile.filename) + path.extname(filePath))) {
+                                        fs.renameSync(filePath, strPathPrefix + '\\' + replaceInvalidWord(jsonfile.filename) + path.extname(filePath))
+                                        console.log('成功: ' + jsonfile.filename)
+                                    } else {
+                                        strPathPrefix = strPath
+                                        fs.renameSync(filePath, strPathPrefix + '\\' + replaceInvalidWord(jsonfile.filename) + path.extname(filePath))
+                                        console.log('有相同檔案: ' + jsonfile.filename)
+                                    }
                                 }
                                 catch(err) {
                                     fs.renameSync(filePath, strAVTooLong + '\\' + jsonfile.number + path.extname(filePath))
