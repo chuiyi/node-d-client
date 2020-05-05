@@ -4,7 +4,7 @@
   "main": "main.js",
   "dependencies": {
     "app": "^0.1.0",
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^4.3.1",
     "electron": "^1.8.2",
     "request": "^2.83.0"
   }
