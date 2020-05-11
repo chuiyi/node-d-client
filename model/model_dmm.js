@@ -2,13 +2,10 @@ var fs = require('fs')
 var https = require('https')
 var path = require('path')
 var request = require('request')
-// var strAV = '//DISKSTATION/Temp/Incoming/AV'
-// var strAV = '//DISKSTATION/Temp/Incoming/AV(沒看過)'
-var strAV = '/Volumes/GoogleDrive/我的雲端硬碟/AV/未整理'
-// var strAV = '//DISKSTATION/Temp/AV/騎兵'
+var strAV = '/Volumes/GoogleDrive/我的雲端硬碟/AV/騎兵'
+var strAVNotFound = '/Volumes/GoogleDrive/我的雲端硬碟/AV/找不到'
 var strAVTooLong = '/Volumes/GoogleDrive/我的雲端硬碟/AV/太長了'
-// var strAVRepeat = '//DISKSTATION/Temp/Incoming/AV/重複檔案'
-// var strPath = '//Volumes//GoogleDrive//我的雲端硬碟//AV (test)'
+var strAVRepeat = '/Volumes/GoogleDrive/我的雲端硬碟/AV/重複'
 var strPath = '/Volumes/GoogleDrive/我的雲端硬碟/AV (test)/test'
 var EXTENSION = ['.mp4', '.avi', '.mkv', '.wmv']
 // /Volumes/GoogleDrive/我的雲端硬碟/AV/太長了
@@ -42,7 +39,8 @@ exports.test = function () {
 					var json = []
 					if (b.length != 0) {
 						json = JSON.parse(b)
-						var isParse = false
+							var isParse = false
+							console.log('分析: ' + realQuerystring)
 						if (json.length === 1) {
 							json = json[0]
 							var aNumber = json.cid.match(/[a-zA-Z]+|[0-9]+/g)
@@ -62,7 +60,7 @@ exports.test = function () {
 							})
 						}
 						else {
-							console.log('失敗(找不到喔): ' + realQuerystring)
+							console.log('失敗(找不到): ' + realQuerystring)
 						}
 
 						if (isParse) {
@@ -77,15 +75,25 @@ exports.test = function () {
 								if (!fs.existsSync(strPathPrefix)) {
 									fs.mkdirSync(strPathPrefix)
 								}
-								if (jsonfile.makers.length === 1) {
-									strPathPrefix = strPathPrefix + '/' + '[' + jsonfile.makers[0].name + ']'
+								// 片商
+								// if (jsonfile.makers.length === 1) {
+								// strPathPrefix = strPathPrefix + '/' + '[' + jsonfile.makers[0].name + ']'
+								// // strPathPrefix = replaceInvalidWord(strPathPrefix)
+								// if (!fs.existsSync(strPathPrefix)) {
+								// fs.mkdirSync(strPathPrefix)
+								// }
+								// }
+								// 女優
+								if (jsonfile.actresses.length === 1) {
+									strPathPrefix = strPathPrefix + '/' + replaceInvalidWord(jsonfile.actresses[0].name)
 									// strPathPrefix = replaceInvalidWord(strPathPrefix)
 									if (!fs.existsSync(strPathPrefix)) {
 										fs.mkdirSync(strPathPrefix)
 									}
-								}
-								if (jsonfile.actresses.length === 1) {
-									strPathPrefix = strPathPrefix + '/' + jsonfile.actresses[0].name
+									}
+								// 片商
+								else if (jsonfile.makers.length === 1) {
+									strPathPrefix = strPathPrefix + '/' + '[' + replaceInvalidWord(jsonfile.makers[0].name) + ']'
 									// strPathPrefix = replaceInvalidWord(strPathPrefix)
 									if (!fs.existsSync(strPathPrefix)) {
 										fs.mkdirSync(strPathPrefix)
@@ -93,22 +101,26 @@ exports.test = function () {
 								}
 								// else {
 								// }
+								var fileImg;
 								try {
-									if (!fs.existsSync(strPathPrefix + '/' + jsonfile.filename + path.extname(filePath))) {
-										fs.renameSync(filePath, strPathPrefix + '/' + jsonfile.filename + path.extname(filePath))
-									    console.log('成功: ' + jsonfile.filename)
+									if (!fs.existsSync(strPathPrefix + '/' + replaceInvalidWord(jsonfile.filename) + path.extname(filePath))) {
+										fs.renameSync(filePath, strPathPrefix + '/' + replaceInvalidWord(jsonfile.filename) + path.extname(filePath))
+										fileImg = fs.createWriteStream(strPathPrefix + '/' + replaceInvalidWord(jsonfile.filename) + '.jpg')
+										console.log('成功: ' + jsonfile.filename)
 									} else {
 										strPathPrefix = strPath
-										fs.renameSync(filePath, strPathPrefix + '/' + jsonfile.filename + path.extname(filePath))
+										fs.renameSync(filePath, strAVRepeat + '/' + replaceInvalidWord(jsonfile.filename) + path.extname(filePath))
+										fileImg = fs.createWriteStream(strAVRepeat + '/' + replaceInvalidWord(jsonfile.filename) + '.jpg')
 										console.log('有相同檔案: ' + jsonfile.filename)
 									}
 								}
 								catch(err) {
+									console.log(err);
 									fs.renameSync(filePath, strAVTooLong + '/' + jsonfile.number + path.extname(filePath))
-										console.log('失敗(檔名過長): ' + jsonfile.filename)
+									fileImg = fs.createWriteStream(strAVTooLong + '/' + jsonfile.number + '.jpg')
+									console.log('失敗(檔名過長): ' + jsonfile.filename)
 								}
 								// deleteFolderRecursive(path.dirname(filePath))
-								var fileImg = fs.createWriteStream(strPathPrefix + '/' + jsonfile.filename + '.jpg')
 								https.get(jsonfile.img_cover, function (response) {
 									response.pipe(fileImg)
 								})
