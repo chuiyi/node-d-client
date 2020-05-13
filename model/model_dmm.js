@@ -3,9 +3,9 @@ var https = require('https')
 var path = require('path')
 var request = require('request')
 var strAV = '/Volumes/GoogleDrive/我的雲端硬碟/AV/騎兵'
-var strAVNotFound = '/Volumes/GoogleDrive/我的雲端硬碟/AV/找不到'
-var strAVTooLong = '/Volumes/GoogleDrive/我的雲端硬碟/AV/太長了'
-var strAVRepeat = '/Volumes/GoogleDrive/我的雲端硬碟/AV/重複'
+var strAVNotFound = '/Volumes/GoogleDrive/我的雲端硬碟/AV/騎兵（遺失片源）'
+var strAVTooLong = '/Volumes/GoogleDrive/我的雲端硬碟/AV/騎兵（片名過長）'
+var strAVRepeat = '/Volumes/GoogleDrive/我的雲端硬碟/AV/騎兵（檔名重複）'
 var strPath = '/Volumes/GoogleDrive/我的雲端硬碟/AV (test)/test'
 var EXTENSION = ['.mp4', '.avi', '.mkv', '.wmv']
 // /Volumes/GoogleDrive/我的雲端硬碟/AV/太長了
